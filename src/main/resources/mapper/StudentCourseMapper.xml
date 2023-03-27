@@ -5,6 +5,7 @@
 
 <mapper namespace="com.sinopic.mapper.StudentCourseMapper">
 
+<!--    提交Github尝试提交修改，commit-->
     <!--    添加课程-->
     <insert id="addStudentCourse" parameterType="com.sinopic.pojo.StudentCourse" >
         insert into student_course(student_id, course_id )VALUES(#{studentId},#{courseId})
