@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace 指向对应的 Mapper 接口 -->
+<mapper namespace="com.sinopic.mapper.StudentMapper">
+    <!-- select 表示查询标签，id 属性值是 DeptMapper 接口中的方法名称，resultType 指定返回值的类型-->
+    <!--可以不指定 parameterType 属性，此时会自动根据接口方法的参数类型进行映射-->
+<!--    <select id="findDeptById" resultType="com.wmx.thymeleafapp.pojo.Dept">-->
+<!--        select * from dept where deptno = #{deptno}-->
+<!--    </select>-->
+    
+    <!--    添加学生-->
+    <insert id="addStudent" parameterType="com.sinopic.pojo.Student" >
+        insert into student(student_id, student_number, student_name, student_grade, student_school, student_major, student_class, student_gender, student_birthday)VALUES(#{studentId},#{studentNumber},#{studentName},#{studentGrade},#{studentSchool},#{studentMajor},#{studentClass},#{studentGender},#{studentBirthday})
+    </insert>
+
+<!--    批量增加学生-->
+    <insert id="addStudentList" parameterType="java.util.List"  >
+        insert  into student (student_id, student_number, student_name, student_grade, student_school, student_major, student_class, student_gender, student_birthday) values
+        <foreach collection="students" item="student" separator=",">
+            (#{student.studentId},#{student.studentNumber},#{student.studentName},#{student.studentGrade},#{student.studentSchool},#{student.studentMajor},#{student.studentClass},#{student.studentGender},#{student.studentBirthday})
+        </foreach>
+    </insert>
+
+    <!--    根据ID删除学生-->
+    <delete id="deleteStudentById" parameterType="int">
+        DELETE FROM student WHERE student_id = #{studentId}
+    </delete>
+
+
+    <!--    根据ID修改数据-->
+    <update id="updateStudentById" parameterType="com.sinopic.pojo.Student">
+        update student
+        <set>
+            <if test="studentNumber != null">
+                student_number = #{ studentNumber },
+            </if>
+            <if test="studentName != null and studentName != ''">
+                student_name = #{ studentName },
+            </if>
+            <if test="studentGrade != null ">
+                student_grade = #{ studentGrade },
+            </if>
+            <if test="studentSchool != null and studentSchool != ''">
+                student_school = #{ studentSchool },
+            </if>
+            <if test="studentMajor != null and studentMajor != ''">
+                student_major = #{ studentMajor },
+            </if>
+            <if test="studentClass != null">
+                student_class = #{ studentClass },
+            </if>
+            <if test="studentGender != null and studentGender != ''">
+                student_gender = #{ studentGender },
+            </if>
+            <if test="studentBirthday != null and studentBirthday != ''">
+                student_birthday = #{ studentBirthday },
+            </if>
+        </set>
+        where student_id = #{studentId }
+    </update>
+    
+    
+    
+    <!--    根据ID查询学生信息-->
+    <select id="findStudentById" resultType="com.sinopic.pojo.Student">
+        SELECT student_id       as studentId,
+               student_name     as studentName,
+               student_number   as studentNumber,
+               student_grade    as studentGrade,
+               student_school   as studentSchool,
+               student_major    as studentMajor,
+               student_class    as studentClass,
+               student_gender   as studentGender,
+               student_birthday as studentBirthday
+        FROM student
+        WHERE student_id = #{studentId}
+    </select>
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinopic.mapper.StudentCourseMapper">
+
+    <!--    添加课程-->
+    <insert id="addStudentCourse" parameterType="com.sinopic.pojo.StudentCourse" >
+        insert into student_course(student_id, course_id )VALUES(#{studentId},#{courseId})
+    </insert>
+
+
+    <!--    根据ID删除课程-->
+    <delete id="deleteStudentCourseById" parameterType="int">
+        DELETE FROM student_course WHERE student_id = #{studentId}
+    </delete>
+
+
+    <!--    根据ID修改数据-->
+    <update id="updateStudentCourseById" parameterType="com.sinopic.pojo.StudentCourse">
+        update student_course
+        <set>
+            <if test="courseId != null">
+                course_id = #{ courseId },
+            </if>
+        </set>
+        where student_id = #{studentId }
+    </update>
+
+<!--根据学生id查询选课和老师-->
+<!--    <select id="findStudentCourseById" resultType="com.sinopic.pojo.StudentCourse" >-->
+<!--    select s.student_id       as studentId,-->
+<!--           s.student_name     as studentName,-->
+
+<!--           c.course_id       as courseId,-->
+<!--           c.course_name     as courseName,-->
+<!--           c.course_number   as courseNumber,-->
+<!--           c.course_school   as courseSchool,-->
+
+<!--           t.teacher_id      as teacherId,-->
+<!--           t.teacher_name    as teacherName-->
+
+<!--    from   student s, course c, teacher t-->
+
+<!--    inner join studentcourse sc on s.student_id = sc.student_id-->
+<!--    inner join teachercourse tc on t.teacher_id = (SELECT tc.teacher_id WHERE tc.course_id =  (SELECT sc.course_id WHERE sc.student_id = #{studentId}))-->
+
+<!--    where  sc.student_id = #{studentId }-->
+<!--    </select>-->
+
+<!--    根据学生ID查询选课-->
+    <select id="selectCourseByStudentId" resultType="com.sinopic.pojo.Course" >
+        select c.course_id       as courseId,
+               c.course_name     as courseName,
+               c.course_number   as courseNumber,
+               c.course_school   as courseSchool
+
+        from   course c
+        inner join student_course sc on c.course_id = sc.course_id
+        where  sc.student_id = #{studentId }
+        </select>
+
+    <!--    根据课程ID查询教师-->
+    <select id="selectTeacherByCourseId" resultType="com.sinopic.pojo.Teacher" >
+        select t.teacher_id       as teacherId,
+               t.teacher_name     as teacherName,
+               t.teacher_number   as teacherNumber,
+               t.teacher_school   as teacherSchool,
+               t.teacher_gender   as teacherGender,
+               t.teacher_birthday as teacherBirthday
+
+        from   teacher t
+        inner join teacher_course tc on t.teacher_id = tc.teacher_id
+        where  tc.course_id = #{courseId }
+    </select>
+
+<!--    根据班级为学生统一选课-->
+
+</mapper>

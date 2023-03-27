@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sinopic.mapper.TeacherMapper">
+    <!-- select 表示查询标签，id 属性值是 DeptMapper 接口中的方法名称，resultType 指定返回值的类型-->
+    <!--可以不指定 parameterType 属性，此时会自动根据接口方法的参数类型进行映射-->
+    <!--    <select id="findDeptById" resultType="com.wmx.thymeleafapp.pojo.Dept">-->
+    <!--        select * from dept where deptno = #{deptno}-->
+    <!--    </select>-->
+
+    <!--    添加课程-->
+    <insert id="addTeacher" parameterType="com.sinopic.pojo.Teacher" >
+        insert into teacher(teacher_id, teacher_number, teacher_name, teacher_school,teacher_gender,teacher_birthday)VALUES(#{teacherId},#{teacherNumber},#{teacherName},#{teacherSchool},#{teacherGender},#{teacherBirthday})
+    </insert>
+
+
+    <!--    根据ID删除课程-->
+    <delete id="deleteTeacherById" parameterType="int">
+        DELETE FROM teacher WHERE teacher_id = #{teacherId}
+    </delete>
+
+
+    <!--    根据ID修改数据-->
+    <update id="updateTeacherById" parameterType="com.sinopic.pojo.Teacher">
+        update teacher
+        <set>
+            <if test="teacherNumber != null">
+                teacher_number = #{ teacherNumber },
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                teacher_name = #{ teacherName },
+            </if>
+            <if test="teacherSchool != null and teacherSchool != ''">
+                teacher_school = #{ teacherSchool },
+            </if>
+            <if test="teacherGender != null and teacherGender != ''">
+                teacher_gender = #{ teacherGender },
+            </if>
+            <if test="teacherBirthday != null and teacherBirthday != ''">
+                teacher_birthday = #{ teacherGender },
+            </if>
+        </set>
+        where teacher_id = #{teacherId }
+    </update>
+
+
+
+    <!--   根据ID查找-->
+    <select id="findTeacherById" resultType="com.sinopic.pojo.Teacher" parameterType="integer">
+        SELECT teacher_id       as teacherId,
+               teacher_name     as teacherName,
+               teacher_number   as teacherNumber,
+               teacher_school   as teacherSchool,
+               teacher_gender   as teacherGender,
+               teacher_birthday as teacherBirthday
+        FROM teacher
+        WHERE teacher_id = #{teacherId}
+    </select>
+
+</mapper>
